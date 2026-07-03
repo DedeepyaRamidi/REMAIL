@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class GmailProperties {
 
     private boolean enabled;
-    private String userId = "me";
+    private String userId = "testingmaild1@gmail.com";
     private String query = "in:inbox newer_than:7d";
     private int pollMaxResults = 25;
     private int historyMaxResults = 100;

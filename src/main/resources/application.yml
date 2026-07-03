@@ -15,7 +15,7 @@ spring:
 remail:
   gmail:
     enabled: ${REMAIL_GMAIL_ENABLED:false}
-    user-id: ${REMAIL_GMAIL_USER_ID:me}
+    user-id: ${REMAIL_GMAIL_USER_ID:testingmaild1@gmail.com}
     query: ${REMAIL_GMAIL_QUERY:in:inbox newer_than:7d}
     poll-max-results: ${REMAIL_GMAIL_POLL_MAX_RESULTS:25}
     history-max-results: ${REMAIL_GMAIL_HISTORY_MAX_RESULTS:100}
@@ -24,6 +24,8 @@ remail:
     client-id: ${REMAIL_GMAIL_CLIENT_ID:}
     client-secret: ${REMAIL_GMAIL_CLIENT_SECRET:}
     token-endpoint: ${REMAIL_GMAIL_TOKEN_ENDPOINT:https://oauth2.googleapis.com/token}
+  task:
+    reminder-delay-ms: ${REMAIL_TASK_REMINDER_DELAY_MS:60000}
   calendar:
     enabled: ${REMAIL_CALENDAR_ENABLED:false}
     access-token: ${REMAIL_CALENDAR_ACCESS_TOKEN:}
@@ -32,3 +34,12 @@ remail:
     client-secret: ${REMAIL_CALENDAR_CLIENT_SECRET:}
     token-endpoint: ${REMAIL_CALENDAR_TOKEN_ENDPOINT:https://oauth2.googleapis.com/token}
     calendar-id: ${REMAIL_CALENDAR_ID:primary}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

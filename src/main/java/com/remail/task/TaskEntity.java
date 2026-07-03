@@ -151,6 +151,16 @@ public class TaskEntity {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void remindLater(LocalDateTime until) {
+        snooze(until);
+    }
+
+    public void reopen() {
+        this.status = TaskStatus.PENDING;
+        this.snoozeUntil = null;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public void complete() {
         this.status = TaskStatus.COMPLETED;
         this.updatedAt = LocalDateTime.now();

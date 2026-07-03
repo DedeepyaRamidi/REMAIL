@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  remail-db:
+    image: postgres:16-alpine
+    container_name: remail-db
+    environment:
+      POSTGRES_DB: remail
+      POSTGRES_USER: remail_user
+      POSTGRES_PASSWORD: remail_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - remail_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U remail_user -d remail"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  remail-app:
+    build: .
+    container_name: remail-app
+    environment:
+      REMAIL_DATASOURCE_URL: jdbc:postgresql://remail-db:5432/remail
+      REMAIL_DATASOURCE_USERNAME: remail_user
+      REMAIL_DATASOURCE_PASSWORD: remail_password
+      REMAIL_DATASOURCE_DRIVER: org.postgresql.Driver
+      REMAIL_GMAIL_USER_ID: testingmaild1@gmail.com
+      REMAIL_CALENDAR_ENABLED: "false"
+      REMAIL_GMAIL_ENABLED: "false"
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+    ports:
+      - "8080:8080"
+    depends_on:
+      remail-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  remail_db_data:
+    driver: local

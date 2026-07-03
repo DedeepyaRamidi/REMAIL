@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,19 @@ public class TaskController {
                 .map(task -> ResponseEntity.ok(toView(task)))
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
+
+        @GetMapping
+        @Operation(summary = "List tasks", description = "List tasks with optional status, company, and query filters")
+        @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tasks returned successfully")
+        })
+        public List<TaskView> getTasks(@RequestParam(required = false) String status,
+                                       @RequestParam(required = false) String company,
+                                       @RequestParam(required = false) String query) {
+        return taskService.findTasks(status, company, query).stream()
+            .map(this::toView)
+            .toList();
+        }
 
     @PostMapping("/{id}/action")
     @Operation(summary = "Apply action to task", description = "Perform an action on a task (SNOOZE, DISMISS, or FILLED)")
