@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: ${REMAIL_DATASOURCE_URL:jdbc:h2:mem:remail;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${REMAIL_DATASOURCE_USERNAME:sa}
+    password: ${REMAIL_DATASOURCE_PASSWORD:}
+    driver-class-name: ${REMAIL_DATASOURCE_DRIVER:org.h2.Driver}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+remail:
+  gmail:
+    enabled: ${REMAIL_GMAIL_ENABLED:false}
+    user-id: ${REMAIL_GMAIL_USER_ID:me}
+    query: ${REMAIL_GMAIL_QUERY:in:inbox newer_than:7d}
+    poll-max-results: ${REMAIL_GMAIL_POLL_MAX_RESULTS:25}
+    history-max-results: ${REMAIL_GMAIL_HISTORY_MAX_RESULTS:100}
+    access-token: ${REMAIL_GMAIL_ACCESS_TOKEN:}
+    refresh-token: ${REMAIL_GMAIL_REFRESH_TOKEN:}
+    client-id: ${REMAIL_GMAIL_CLIENT_ID:}
+    client-secret: ${REMAIL_GMAIL_CLIENT_SECRET:}
+    token-endpoint: ${REMAIL_GMAIL_TOKEN_ENDPOINT:https://oauth2.googleapis.com/token}
+  calendar:
+    enabled: ${REMAIL_CALENDAR_ENABLED:false}
+    access-token: ${REMAIL_CALENDAR_ACCESS_TOKEN:}
+    refresh-token: ${REMAIL_CALENDAR_REFRESH_TOKEN:}
+    client-id: ${REMAIL_CALENDAR_CLIENT_ID:}
+    client-secret: ${REMAIL_CALENDAR_CLIENT_SECRET:}
+    token-endpoint: ${REMAIL_CALENDAR_TOKEN_ENDPOINT:https://oauth2.googleapis.com/token}
+    calendar-id: ${REMAIL_CALENDAR_ID:primary}
