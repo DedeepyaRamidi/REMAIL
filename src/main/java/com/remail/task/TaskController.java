@@ -1,5 +1,11 @@
 package com.remail.task;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/tasks")
+@Tag(name = "Tasks", description = "Task management endpoints for REMAIL")
 public class TaskController {
 
     private final TaskService taskService;
@@ -20,6 +27,12 @@ public class TaskController {
     }
 
     @GetMapping("/active")
+    @Operation(summary = "Get active task", description = "Retrieve the currently active task (next in queue)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Active task found",
+                    content = @Content(schema = @Schema(implementation = TaskView.class))),
+            @ApiResponse(responseCode = "204", description = "No active task available")
+    })
     public ResponseEntity<TaskView> getActiveTask() {
         return taskService.findActiveTask()
                 .map(task -> ResponseEntity.ok(toView(task)))
@@ -27,6 +40,12 @@ public class TaskController {
     }
 
     @PostMapping("/{id}/action")
+    @Operation(summary = "Apply action to task", description = "Perform an action on a task (SNOOZE, DISMISS, or FILLED)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Action applied successfully",
+                    content = @Content(schema = @Schema(implementation = TaskView.class))),
+            @ApiResponse(responseCode = "404", description = "Task not found")
+    })
     public ResponseEntity<TaskView> applyAction(@PathVariable long id,
                                                 @RequestParam TaskActionType actionType) {
         try {
